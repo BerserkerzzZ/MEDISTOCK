@@ -1,0 +1,7 @@
+{
+  "name": "Medistock",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
