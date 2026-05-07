@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Acceso MEDISTOCK</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <div class="ion-text-center ion-margin-bottom">
+      <ion-icon name="medical-outline" style="font-size: 64px;" color="primary"></ion-icon>
+      <h2>Bienvenido</h2>
+      <p>Inicia sesión para gestionar el inventario</p>
+    </div>
+
+    <ion-list lines="none">
+      <ion-item class="ion-margin-bottom">
+        <ion-label position="stacked">Correo Electrónico</ion-label>
+        <ion-input type="email" placeholder="ejemplo@correo.com" [(ngModel)]="loginData.email" name="email"></ion-input>
+      </ion-item>
+
+      <ion-item class="ion-margin-bottom">
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input type="password" placeholder="********" [(ngModel)]="loginData.password" name="password"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" (click)="onLogin()" class="ion-margin-top">
+      Ingresar
+    </ion-button>
+
+    <div class="ion-text-center ion-margin-top">
+      <ion-note>Sistema de Gestión Medistock v1.0</ion-note>
+    </div>
+  </div>
+</ion-content>

@@ -27,4 +27,4 @@ Acceso a los diagramas de despliegue, comunicación y paquetes:
 * [Carpeta Compartida de Diagramas](https://drive.google.com/drive/folders/1E4u9zYEDC-jMzAcBr26QIJ7sw0ehBlYC?usp=sharing)
 
 ## Pruebas de API
-* Postman: Existen datos en la base de datos que si bien no tienen relacion con el caso estos si se pueden borrar, listar como se muestra en el video que esta en la carpeta junto con los diagramas
+* Postman: Existen datos en la base de datos que si bien no tienen relacion con el caso estos si se pueden borrar, listar como se muestra en el video que esta en la carpeta junto con los diagramas.
