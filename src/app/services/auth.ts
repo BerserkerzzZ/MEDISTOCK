@@ -21,7 +21,8 @@ export class Auth {
       map(res => {
         if (res.ok && res.token) {
           localStorage.setItem('token', res.token);
-          localStorage.setItem('rol', res.usuario.rol); 
+          localStorage.setItem('rol', res.usuario.rol);
+          localStorage.setItem('userId', res.usuario._id || '');
         }
         return res;
       })
@@ -31,5 +32,6 @@ export class Auth {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('userId');
   }
 }

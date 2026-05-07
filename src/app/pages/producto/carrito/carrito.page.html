@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/producto/catalogo"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mi Carrito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="items.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="cart-outline" style="font-size: 80px;" color="medium"></ion-icon>
+    <h2>Tu carrito está vacío</h2>
+    <p>Parece que aún no has añadido insumos médicos.</p>
+    <ion-button routerLink="/producto/catalogo" fill="outline">
+      Ir al Catálogo
+    </ion-button>
+  </div>
+
+  <ion-list *ngIf="items.length > 0">
+    <ion-item-sliding *ngFor="let item of items; let i = index">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="item.imgP" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ item.nombreP }}</h2>
+          <p>{{ item.categoria }}</p>
+          <h3 color="primary">{{ item.precioP | currency:'CLP':'symbol-narrow':'1.0-0' }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarDelCarrito(i)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+
+<ion-footer *ngIf="items.length > 0">
+  <ion-toolbar class="ion-padding">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-text color="medium">Total Estimado:</ion-text>
+        </ion-col>
+        <ion-col class="ion-text-end">
+          <ion-text color="dark">
+            <h2 style="margin: 0; font-weight: bold;">
+              {{ total | currency:'CLP':'symbol-narrow':'1.0-0' }}
+            </h2>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button expand="block" color="success" (click)="pagar()" class="ion-margin-top">
+      Pagar con Webpay Plus
+      <ion-icon name="card-outline" slot="end"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
