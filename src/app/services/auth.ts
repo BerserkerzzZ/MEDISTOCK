@@ -14,6 +14,7 @@ export class Auth {
 
   constructor(private http: HttpClient) { }
 
+  // --- LOGIN ---
   login(email: string, password: string): Observable<AuthResponse> {
     const data = { email, password };
     
@@ -27,11 +28,29 @@ export class Auth {
         return res;
       })
     );
-}
+  }
 
+  // --- REGISTRO ---
+  // Conecta con exports.crearUsuario de tu controlador en Node.js
+  registrar(usuario: any): Observable<any> {
+    // La ruta debe coincidir con tu router de Express (ej: /api/usuarios/crear)
+    return this.http.post<any>(`${this.apiUrl}/usuarios`, usuario);
+  }
+
+  // --- LOGOUT ---
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    localStorage.removeItem('rol');
     localStorage.removeItem('userId');
+  }
+
+  // --- UTILIDADES ---
+  // Método extra para verificar el rol rápidamente en los Guards
+  getRol(): string | null {
+    return localStorage.getItem('rol');
+  }
+
+  estaLogueado(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

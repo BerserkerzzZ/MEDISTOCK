@@ -1,0 +1,68 @@
+<ion-header border-none>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Cuenta Medistock</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="register-form">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-label position="stacked">Nombre Completo</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.nombre" type="text" placeholder="Ej: Juan Pérez"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.email" type="email" placeholder="correo@ejemplo.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.password" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo de Usuario</ion-label>
+        <ion-select [(ngModel)]="nuevoUsuario.rol" placeholder="Seleccione su perfil">
+          <ion-select-option value="PACIENTE">Paciente</ion-select-option>
+          <ion-select-option value="INSTITUCION">Institución</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="nuevoUsuario.rol === 'INSTITUCION'">
+        <ion-label position="stacked">RUT de la Institución</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.rut_institucion" type="text" placeholder="Ej: 76.123.456-K"></ion-input>
+      </ion-item>
+
+      <ion-item-divider color="light">
+        <ion-label>Dirección de Despacho</ion-label>
+      </ion-item-divider>
+
+      <ion-item>
+        <ion-label position="stacked">Calle y Número</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.calle" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Comuna</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.comuna" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Ciudad</ion-label>
+        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.ciudad" type="text"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding-top">
+      <ion-button expand="block" color="primary" (click)="onRegister()">
+        <ion-icon name="person-add-outline" slot="start"></ion-icon>
+        Registrarme
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

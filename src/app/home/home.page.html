@@ -1,20 +1,78 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Medistock</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <div class="welcome-header">
+    <h1>Hola, {{ nombreUsuario }}</h1>
+    <p>¿Qué deseas gestionar hoy?</p>
+  </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" *ngIf="esAdmin">
+        <ion-card color="secondary" (click)="navegar('/admin-productos')" class="main-card">
+          <ion-card-header>
+            <ion-icon name="cube-outline" class="card-icon"></ion-icon>
+            <ion-card-title>Gestión de Inventario</ion-card-title>
+            <ion-card-subtitle>Control de stock y productos</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card (click)="navegar('/catalogo')" class="menu-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="medkit-outline"></ion-icon>
+            <p>Catálogo</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card (click)="navegar('/pedidos')" class="menu-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="cart-outline"></ion-icon>
+            <p>Mis Pedidos</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card (click)="navegar('/perfil')" class="menu-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            <p>Mi Perfil</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-card (click)="navegar('/soporte')" class="menu-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="help-buoy-outline"></ion-icon>
+            <p>Soporte</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="esAdmin" class="admin-notice">
+    <ion-list-header>
+      <ion-label color="danger">Alertas de Inventario</ion-label>
+    </ion-list-header>
+    <ion-item lines="none" class="info-item">
+      <ion-icon name="warning-outline" slot="start" color="warning"></ion-icon>
+      <ion-label>Tienes productos bajo el stock mínimo</ion-label>
+      <ion-button fill="clear" (click)="navegar('/admin-productos')">Ver</ion-button>
+    </ion-item>
   </div>
 </ion-content>

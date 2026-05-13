@@ -1,0 +1,131 @@
+<ion-header border-none>
+  <ion-toolbar color="primary">
+    <ion-title>Gestión Medistock - Admin</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cargarProductos()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- 1. TABLA DE INVENTARIO -->
+  <div class="table-container">
+    <ion-grid>
+      <ion-row class="header-row">
+        <ion-col size="2"><strong>Cód.</strong></ion-col>
+        <ion-col size="4"><strong>Producto</strong></ion-col>
+        <ion-col size="2"><strong>Stock</strong></ion-col>
+        <ion-col size="2"><strong>Precio</strong></ion-col>
+        <ion-col size="2" class="ion-text-center"><strong>Acción</strong></ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="productos.length === 0" class="ion-text-center ion-padding">
+        <ion-col size="12">
+          <ion-text color="medium">Conectando con el servidor en AWS...</ion-text>
+        </ion-col>
+      </ion-row>
+
+      <!-- La fila se pinta de amarillo automáticamente si es critico-bg -->
+      <ion-row *ngFor="let producto of productos" class="data-row" [class.critico-bg]="esStockBajo(producto)">
+        <ion-col size="2">{{ producto.codigoBarra }}</ion-col>
+        <ion-col size="4">
+          <div class="product-info">
+            <ion-text color="dark"><strong>{{ producto.nombreP }}</strong></ion-text>
+            <p style="margin:0; font-size: 0.75em; color: #666;">{{ producto.categoria }}</p>
+          </div>
+        </ion-col>
+        <ion-col size="2" [class.low-stock]="esStockBajo(producto)">
+          {{ calcularTotalStock(producto) }}
+        </ion-col>
+        <ion-col size="2">${{ producto.precioP | number }}</ion-col>
+        <ion-col size="2" class="ion-text-center">
+          <ion-button fill="clear" (click)="presentActionSheet(producto)">
+            <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- 2. BOTÓN DE AGREGAR -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="success" (click)="abrirModal(true)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- 3. MODAL DE GESTIÓN (Sin el toggle de crítico) -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="isModalOpen = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>{{ modoEdicion ? 'Editar' : 'Nuevo' }} Producto</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="abrirModal(false)">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-list lines="full">
+          <ion-item>
+            <ion-label position="stacked">Nombre del Producto</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.nombreP" type="text" placeholder="Ej: Catéter 18G"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Código de Barras</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.codigoBarra" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Precio Unitario ($)</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.precioP" type="number"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Categoría</ion-label>
+            <ion-select [(ngModel)]="nuevoProducto.categoria" placeholder="Seleccione categoría">
+              <ion-select-option value="Insumos">Insumos</ion-select-option>
+              <ion-select-option value="Medicamentos">Medicamentos</ion-select-option>
+              <ion-select-option value="Equipamiento">Equipamiento</ion-select-option>
+              <ion-select-option value="Urgencia">Urgencia</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Descripción Técnica</ion-label>
+            <ion-textarea [(ngModel)]="nuevoProducto.descripcionP" rows="3"></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">URL de la Imagen</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.imgP" type="url"></ion-input>
+          </ion-item>
+
+          <!-- SECCIÓN DE INVENTARIO: Aquí nace la lógica de crítico -->
+          <ion-item-divider color="light">
+            <ion-label>Control de Stock</ion-label>
+          </ion-item-divider>
+          
+          <ion-item>
+            <ion-label position="stacked">Existencia Actual</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.stocks[0].actual" type="number"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Stock Mínimo (Nivel de Alerta)</ion-label>
+            <ion-input [(ngModel)]="nuevoProducto.stocks[0].minimo" type="number"></ion-input>
+          </ion-item>
+        </ion-list>
+
+        <ion-button expand="block" color="success" (click)="guardarProducto()" class="ion-margin-top">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          {{ modoEdicion ? 'Actualizar Producto' : 'Registrar Producto' }}
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

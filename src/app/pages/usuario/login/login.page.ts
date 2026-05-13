@@ -28,11 +28,24 @@ export class LoginPage {
         next: (res) => {
           if (res.ok) {
             console.log('Login exitoso!');
-            this.router.navigate(['/home']);
+
+            // --- LÓGICA DE REDIRECCIÓN POR ROL ---
+            // Accedemos al campo 'rol' y comparamos con 'ADMINISTRADOR'
+            const resAny = res as any;
+            const userRole = res.usuario?.rol || resAny.rol; 
+
+            if (userRole === 'ADMINISTRADOR') {
+              console.log('Redirigiendo a panel de administración');
+              this.router.navigate(['/admin-productos']);
+            } else {
+              console.log('Redirigiendo a vista de usuario');
+              this.router.navigate(['/home']);
+            }
           }
         },
         error: (err) => {
           console.error('Error en el login', err);
+          // Si el servidor de AWS no responde o hay error de credenciales
           alert(err.error.msg || 'Error de conexión con el servidor AWS');
         }
       });
