@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://98.83.245.177:3000/api'
+  apiUrl: 'https://very-wobbly-chokehold.ngrok-free.dev/api'
 };
