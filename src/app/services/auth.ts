@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // 1. Agregamos HttpHeaders
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
@@ -12,13 +12,21 @@ export class Auth {
 
   private apiUrl = environment.baseUrl; 
 
+  // 2. Definimos las opciones con el header mágico de ngrok
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'ngrok-skip-browser-warning': 'true'
+    })
+  };
+
   constructor(private http: HttpClient) { }
 
   // --- LOGIN ---
   login(email: string, password: string): Observable<AuthResponse> {
     const data = { email, password };
     
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data).pipe(
+    // 3. Pasamos this.httpOptions como tercer argumento
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data, this.httpOptions).pipe(
       map(res => {
         if (res.ok && res.token) {
           localStorage.setItem('token', res.token);
@@ -31,10 +39,9 @@ export class Auth {
   }
 
   // --- REGISTRO ---
-  // Conecta con exports.crearUsuario de tu controlador en Node.js
   registrar(usuario: any): Observable<any> {
-    // La ruta debe coincidir con tu router de Express (ej: /api/usuarios/crear)
-    return this.http.post<any>(`${this.apiUrl}/usuarios`, usuario);
+    // 3. También lo agregamos aquí
+    return this.http.post<any>(`${this.apiUrl}/usuarios`, usuario, this.httpOptions);
   }
 
   // --- LOGOUT ---
@@ -45,7 +52,6 @@ export class Auth {
   }
 
   // --- UTILIDADES ---
-  // Método extra para verificar el rol rápidamente en los Guards
   getRol(): string | null {
     return localStorage.getItem('rol');
   }
