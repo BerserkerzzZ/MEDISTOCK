@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://very-wobbly-chokehold.ngrok-free.dev/api'
+  baseUrl: 'https://very-wobbly-chokehold.ngrok-free.dev/api'
 };
 /*
  * For easier debugging in development mode, you can import the following file
