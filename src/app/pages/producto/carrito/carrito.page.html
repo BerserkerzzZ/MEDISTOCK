@@ -1,37 +1,57 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/producto/catalogo"></ion-back-button>
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Mi Carrito</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="items.length === 0" class="ion-text-center ion-padding">
-    <ion-icon name="cart-outline" style="font-size: 80px;" color="medium"></ion-icon>
+  <div *ngIf="items.length === 0" class="empty-state">
+    <ion-icon name="cart-outline"></ion-icon>
     <h2>Tu carrito está vacío</h2>
     <p>Parece que aún no has añadido insumos médicos.</p>
-    <ion-button routerLink="/producto/catalogo" fill="outline">
+    <ion-button routerLink="/catalogo" fill="outline">
       Ir al Catálogo
     </ion-button>
   </div>
 
   <ion-list *ngIf="items.length > 0">
-    <ion-item-sliding *ngFor="let item of items; let i = index">
+    <ion-item-sliding *ngFor="let item of items">
       <ion-item>
         <ion-thumbnail slot="start">
-          <img [src]="item.imgP" />
+          <img [src]="item.producto.imgP" alt="{{ item.producto.nombreP }}" />
         </ion-thumbnail>
+        
         <ion-label>
-          <h2>{{ item.nombreP }}</h2>
-          <p>{{ item.categoria }}</p>
-          <h3 color="primary">{{ item.precioP | currency:'CLP':'symbol-narrow':'1.0-0' }}</h3>
+          <h2>{{ item.producto.nombreP }}</h2>
+          <p>{{ item.producto.categoria }}</p>
+          <h3 color="primary">
+            {{ item.producto.precioP | currency:'CLP':'symbol-narrow':'1.0-0' }}
+          </h3>
         </ion-label>
+
+        <div slot="end" class="quantity-controls" style="display: flex; align-items: center; gap: 8px;">
+          <ion-button fill="clear" color="danger" (click)="restarUnidad(item)" style="--padding-start: 4px; --padding-end: 4px;">
+            <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+          </ion-button>
+          
+          <span style="font-weight: 600; font-size: 15px; min-width: 20px; text-align: center;">
+            {{ item.cantidad }}
+          </span>
+          
+          <ion-button fill="clear" color="success" 
+                      (click)="sumarUnidad(item)" 
+                      [disabled]="alcanzoLimiteStock(item)" 
+                      style="--padding-start: 4px; --padding-end: 4px;">
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </div>
       </ion-item>
 
       <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="eliminarDelCarrito(i)">
+        <ion-item-option color="danger" (click)="eliminarDelCarrito(item)">
           <ion-icon slot="icon-only" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>

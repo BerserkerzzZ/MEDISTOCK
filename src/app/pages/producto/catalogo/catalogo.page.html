@@ -1,6 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Catálogo de Insumos</ion-title>
+    
     <ion-buttons slot="end">
       <ion-button routerLink="/carrito">
         <ion-icon slot="icon-only" name="cart"></ion-icon>
@@ -10,7 +17,20 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="loading" class="ion-text-center ion-padding">
+  <div class="divisa-container ion-padding-horizontal ion-margin-top">
+    <ion-item lines="none" class="selector-item">
+      <ion-icon name="cash-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>Ver precios en:</ion-label>
+      <ion-select [value]="monedaSeleccionada" (ionChange)="cambiarMoneda($event)" interface="popover">
+        <ion-select-option value="CLP">Pesos ($)</ion-select-option>
+        <ion-select-option value="uf">UF</ion-select-option>
+        <ion-select-option value="dolar">Dólar (USD)</ion-select-option>
+        <ion-select-option value="euro">Euro (€)</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Cargando inventario...</p>
   </div>
@@ -28,8 +48,17 @@
               </ion-badge>
             </div>
             <ion-card-title>{{ producto.nombreP }}</ion-card-title>
+            
             <ion-card-subtitle class="precio">
-              {{ producto.precioP | currency:'CLP':'symbol-narrow':'1.0-0' }}
+              <span *ngIf="monedaSeleccionada === 'CLP'; else conversioDivisa">
+                {{ producto.precioP | currency:'CLP':'symbol-narrow':'1.0-0' }}
+              </span>
+              <ng-template #conversioDivisa>
+                <span class="valor-convertido">
+                  {{ (producto.precioP / divisas[monedaSeleccionada]) | number:'1.2-2' }} 
+                  <small>{{ monedaSeleccionada | uppercase }}</small>
+                </span>
+              </ng-template>
             </ion-card-subtitle>
           </ion-card-header>
 
@@ -44,10 +73,10 @@
             </ion-item>
           </ion-card-content>
 
-          <div class="ion-padding">
-            <ion-button expand="block" (click)="agregarAlCarrito(producto)" color="success">
+          <div class="card-footer">
+            <ion-button expand="block" (click)="agregarAlCarrito(producto)">
               <ion-icon name="add-outline" slot="start"></ion-icon>
-              Añadir al Carrito
+              Añadir al carrito
             </ion-button>
           </div>
         </ion-card>

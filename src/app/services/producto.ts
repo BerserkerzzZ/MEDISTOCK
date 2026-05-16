@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // 1. Agrega HttpHeaders
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Producto } from '../models/productoModels';
@@ -11,7 +11,7 @@ export class ProductoService {
 
   private apiUrl = `${environment.baseUrl}/productos`;
 
-  // 2. Define los headers que saltan la advertencia de ngrok
+// para evitar errores de ngrok
   private httpOptions = {
     headers: new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
@@ -20,7 +20,6 @@ export class ProductoService {
 
   constructor(private http: HttpClient) { }
 
-  // 3. Pasa this.httpOptions como segundo o tercer argumento en cada método
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiUrl, this.httpOptions);
   }

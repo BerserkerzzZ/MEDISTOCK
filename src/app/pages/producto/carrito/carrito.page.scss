@@ -1,0 +1,144 @@
+ion-toolbar {
+  --background: #0F6E56;
+  --color: white;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 32px;
+  gap: 12px;
+
+  ion-icon {
+    font-size: 80px;
+    color: #B4B2A9;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    margin: 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #888780;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  ion-button {
+    --border-color: #0F6E56;
+    --color: #0F6E56;
+    --border-radius: 12px;
+    margin-top: 8px;
+  }
+}
+
+ion-list {
+  background: transparent;
+  padding: 12px 16px;
+}
+
+ion-item-sliding {
+  margin-bottom: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+ion-item {
+  --background: white;
+  --border-radius: 14px;
+  --border-color: transparent;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+
+  ion-thumbnail {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 12px;
+    border: 0.5px solid rgba(0, 0, 0, 0.06);
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  ion-label {
+    h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      margin-bottom: 2px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #888780;
+      margin-bottom: 4px;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0F6E56;
+      margin: 0;
+    }
+  }
+}
+
+ion-item-option[color="danger"] {
+  --background: #FCEBEB;
+  --color: #A32D2D;
+  border-radius: 0 14px 14px 0;
+
+  ion-icon {
+    font-size: 20px;
+  }
+}
+
+ion-footer {
+  ion-toolbar {
+    --background: white;
+    --border-color: rgba(0, 0, 0, 0.08);
+    padding: 12px 16px 16px;
+    border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+  }
+
+  ion-grid {
+    padding: 0 0 12px;
+  }
+
+  ion-text[color="medium"] {
+    font-size: 13px;
+    color: #888780;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+  }
+
+  ion-button {
+    --background: #0F6E56;
+    --background-activated: #085041;
+    --border-radius: 14px;
+    --color: white;
+    height: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+  }
+}

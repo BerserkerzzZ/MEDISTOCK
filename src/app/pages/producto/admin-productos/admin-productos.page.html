@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- 1. TABLA DE INVENTARIO -->
   <div class="table-container">
     <ion-grid>
       <ion-row class="header-row">
@@ -27,7 +26,6 @@
         </ion-col>
       </ion-row>
 
-      <!-- La fila se pinta de amarillo automáticamente si es critico-bg -->
       <ion-row *ngFor="let producto of productos" class="data-row" [class.critico-bg]="esStockBajo(producto)">
         <ion-col size="2">{{ producto.codigoBarra }}</ion-col>
         <ion-col size="4">
@@ -49,14 +47,12 @@
     </ion-grid>
   </div>
 
-  <!-- 2. BOTÓN DE AGREGAR -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="success" (click)="abrirModal(true)">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <!-- 3. MODAL DE GESTIÓN (Sin el toggle de crítico) -->
   <ion-modal [isOpen]="isModalOpen" (didDismiss)="isModalOpen = false">
     <ng-template>
       <ion-header>
@@ -82,7 +78,11 @@
 
           <ion-item>
             <ion-label position="stacked">Precio Unitario ($)</ion-label>
-            <ion-input [(ngModel)]="nuevoProducto.precioP" type="number"></ion-input>
+            <ion-input [(ngModel)]="nuevoProducto.precioP" 
+                       type="number" 
+                       min="1"
+                       (keydown)="bloquearLetras($event)">
+            </ion-input>
           </ion-item>
 
           <ion-item>
@@ -105,19 +105,26 @@
             <ion-input [(ngModel)]="nuevoProducto.imgP" type="url"></ion-input>
           </ion-item>
 
-          <!-- SECCIÓN DE INVENTARIO: Aquí nace la lógica de crítico -->
           <ion-item-divider color="light">
             <ion-label>Control de Stock</ion-label>
           </ion-item-divider>
           
           <ion-item>
             <ion-label position="stacked">Existencia Actual</ion-label>
-            <ion-input [(ngModel)]="nuevoProducto.stocks[0].actual" type="number"></ion-input>
+            <ion-input [(ngModel)]="nuevoProducto.stocks[0].actual" 
+                       type="number" 
+                       min="0"
+                       (keydown)="bloquearLetras($event)">
+            </ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Stock Mínimo (Nivel de Alerta)</ion-label>
-            <ion-input [(ngModel)]="nuevoProducto.stocks[0].minimo" type="number"></ion-input>
+            <ion-input [(ngModel)]="nuevoProducto.stocks[0].minimo" 
+                       type="number" 
+                       min="0"
+                       (keydown)="bloquearLetras($event)">
+            </ion-input>
           </ion-item>
         </ion-list>
 

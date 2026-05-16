@@ -29,8 +29,7 @@ export class LoginPage {
           if (res.ok) {
             console.log('Login exitoso!');
 
-            // --- LÓGICA DE REDIRECCIÓN POR ROL ---
-            // Accedemos al campo 'rol' y comparamos con 'ADMINISTRADOR'
+//redirige al usuario logeado en caso de ser administrador
             const resAny = res as any;
             const userRole = res.usuario?.rol || resAny.rol; 
 
@@ -45,7 +44,6 @@ export class LoginPage {
         },
         error: (err) => {
           console.error('Error en el login', err);
-          // Si el servidor de AWS no responde o hay error de credenciales
           alert(err.error.msg || 'Error de conexión con el servidor AWS');
         }
       });

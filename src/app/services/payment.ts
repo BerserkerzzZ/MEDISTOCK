@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // 1. Agrega HttpHeaders
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class PaymentService {
   private apiUrl = `${environment.baseUrl}/webpay`;
 
-  // 2. Definimos las opciones con el header de ngrok
+// para evitar errores de ngrok
   private httpOptions = {
     headers: new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
@@ -19,7 +19,6 @@ export class PaymentService {
   constructor(private http: HttpClient) { }
 
   iniciarPago(datosPedido: any): Observable<any> {
-    // 3. Pasamos los headers en el post
     return this.http.post(`${this.apiUrl}/iniciar`, datosPedido, this.httpOptions);
   }
 }

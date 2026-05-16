@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { CartService } from '../../../services/cart';
-import { Producto } from '../../../models/productoModels';
+import { CartService, CartItem } from '../../../services/cart'; 
 import { RouterLink } from '@angular/router';
 import { PaymentService } from '../../../services/payment';
 
@@ -16,7 +15,7 @@ import { PaymentService } from '../../../services/payment';
 })
 export class CarritoPage implements OnInit {
 
-  items: Producto[] = [];
+  items: CartItem[] = [];
   total: number = 0;
 
   constructor(
@@ -33,9 +32,41 @@ export class CarritoPage implements OnInit {
     this.total = this.cartService.getMontoTotal();
   }
 
-  eliminarDelCarrito(index: number) {
-    this.items.splice(index, 1);
-    this.total = this.cartService.getMontoTotal();
+  
+  sumarUnidad(item: CartItem) {
+    if (item.producto._id && item.producto.stocks) {
+      const stockMaximo = item.producto.stocks.reduce((acc, b) => acc + b.actual, 0);
+      
+      const seIncremento = this.cartService.incrementarCantidad(item.producto._id, stockMaximo);
+      
+      if (!seIncremento) {
+        alert(`Lo sentimos, no quedan más unidades disponibles de ${item.producto.nombreP}.`);
+      }
+      
+      this.cargarCarrito();
+    }
+  }
+
+  restarUnidad(item: CartItem) {
+    if (item.producto._id) {
+      this.cartService.decrementarCantidad(item.producto._id);
+      this.cargarCarrito();
+    }
+  }
+
+  eliminarDelCarrito(item: CartItem) {
+    if (item.producto._id) {
+      this.cartService.eliminarProducto(item.producto._id);
+      this.cargarCarrito();
+    }
+  }
+
+  alcanzoLimiteStock(item: CartItem): boolean {
+    if (!item.producto.stocks) return false;
+    
+    const totalStock = item.producto.stocks.reduce((acc, b) => acc + b.actual, 0);
+    
+    return item.cantidad >= totalStock;
   }
 
   pagar() {
@@ -53,15 +84,15 @@ export class CarritoPage implements OnInit {
       monto: this.total,
       clienteId: idUsuarioLogueado,
       tipoEnvio: 'NORMAL',
-      articulos: this.items.map(p => ({
-        producto: p._id,
-        nombreP: p.nombreP,
-        cantidad: 1, 
-        precioUnitario: p.precioP
+      articulos: this.items.map(item => ({
+        producto: item.producto._id,
+        nombreP: item.producto.nombreP,
+        cantidad: item.cantidad, 
+        precioUnitario: item.producto.precioP
       }))
     };
 
-    console.log('Iniciando pago para el usuario:', idUsuarioLogueado);
+    console.log('Iniciando pago para el usuario:', idUsuarioLogueado, datosPedido);
 
     this.paymentService.iniciarPago(datosPedido).subscribe({
       next: (res) => {

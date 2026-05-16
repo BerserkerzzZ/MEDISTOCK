@@ -16,11 +16,9 @@ export class AdminProductosPage implements OnInit {
 
   productos: Producto[] = [];
   
-  // Estado del Modal
   isModalOpen = false;
   modoEdicion = false;
   
-  // Inicialización del objeto siguiendo tu Interface
   nuevoProducto: Producto = this.limpiarFormulario();
 
   constructor(
@@ -34,14 +32,11 @@ export class AdminProductosPage implements OnInit {
     this.cargarProductos();
   }
 
-  // --- LÓGICA DEL MODAL ---
   abrirModal(abrir: boolean, producto?: Producto) {
     this.isModalOpen = abrir;
     if (producto) {
       this.modoEdicion = true;
-      // Usamos spread operator para no modificar el objeto de la lista original por referencia
       this.nuevoProducto = { ...producto }; 
-      // Si por alguna razón el producto no tiene el arreglo de stocks, lo inicializamos
       if (!this.nuevoProducto.stocks) {
         this.nuevoProducto.stocks = [{ bodega: 'Central', actual: 0, minimo: 5 }];
       }
@@ -64,7 +59,6 @@ export class AdminProductosPage implements OnInit {
     };
   }
 
-  // --- CÁLCULOS PARA LA VISTA ---
   calcularTotalStock(producto: Producto): number {
     if (!producto.stocks || producto.stocks.length === 0) return 0;
     return producto.stocks.reduce((acc, b) => acc + b.actual, 0);
@@ -72,15 +66,12 @@ export class AdminProductosPage implements OnInit {
 
   esStockBajo(producto: Producto): boolean {
     if (!producto.stocks) return false;
-    // Retorna true si el actual es menor o igual al mínimo en cualquier bodega
     return producto.stocks.some(b => b.actual <= b.minimo);
   }
 
-  // --- LLAMADAS A LA API (AWS EC2) ---
   cargarProductos() {
     this.productoService.getProductos().subscribe({
       next: (res: any) => {
-        // Manejamos tanto si viene el array directo o dentro de la propiedad .productos
         this.productos = res.productos ? res.productos : res;
       },
       error: (err) => console.error('Error al conectar con el servidor:', err)
@@ -88,14 +79,11 @@ export class AdminProductosPage implements OnInit {
   }
 
   guardarProducto() {
-  // Validaciones básicas
   if (!this.nuevoProducto.nombreP || !this.nuevoProducto.codigoBarra) {
     this.mostrarToast('Por favor, completa los campos obligatorios', 'warning');
     return;
   }
 
-  // --- LOGICA AUTOMÁTICA DE STOCK CRÍTICO ---
-  // Calculamos si es crítico antes de enviar a la base de datos
   this.nuevoProducto.isCritico = this.esStockBajo(this.nuevoProducto);
 
   if (this.modoEdicion) {
@@ -127,7 +115,6 @@ export class AdminProductosPage implements OnInit {
     });
   }
 
-  // --- INTERFAZ DE USUARIO (ActionSheet y Alerts) ---
   async presentActionSheet(producto: Producto) {
     const actionSheet = await this.actionSheetCtrl.create({
       header: producto.nombreP,
@@ -174,4 +161,11 @@ export class AdminProductosPage implements OnInit {
     });
     await toast.present();
   }
+  bloquearLetras(event: KeyboardEvent) {
+  const caracteresInvalidados = ['e', 'E', '+', '-', ',', '.'];
+  
+  if (caracteresInvalidados.includes(event.key)) {
+    event.preventDefault();
+  }
+}
 }

@@ -1,78 +1,78 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>Medistock</ion-title>
+    <ion-buttons slot="start">
+      <div class="toolbar-logo">
+        <ion-icon name="heart-outline" class="logo-icon"></ion-icon>
+        <span>Medistock</span>
+      </div>
+    </ion-buttons>
+    
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">
+      <ion-button *ngIf="estaLogueado" (click)="confirmarLogout()">
         <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button *ngIf="!estaLogueado" (click)="navegar('/login')">
+        <ion-icon slot="icon-only" name="log-in-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="welcome-header">
-    <h1>Hola, {{ nombreUsuario }}</h1>
-    <p>¿Qué deseas gestionar hoy?</p>
+<ion-content>
+  <div class="hero">
+    <p class="hero-greeting">Bienvenido de vuelta</p>
+    <h1 class="hero-name">{{ nombreUsuario }}</h1>
+    <p class="hero-sub">¿Qué deseas gestionar hoy?</p>
   </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" *ngIf="esAdmin">
-        <ion-card color="secondary" (click)="navegar('/admin-productos')" class="main-card">
-          <ion-card-header>
-            <ion-icon name="cube-outline" class="card-icon"></ion-icon>
-            <ion-card-title>Gestión de Inventario</ion-card-title>
-            <ion-card-subtitle>Control de stock y productos</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
+  <svg class="hero-wave" viewBox="0 0 360 28" xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="none" width="100%" height="28">
+    <path d="M0,0 C90,28 270,28 360,0 L360,28 L0,28 Z" fill="var(--ion-background-color, #f0f4f8)"/>
+  </svg>
 
-      <ion-col size="6">
-        <ion-card (click)="navegar('/catalogo')" class="menu-card">
-          <ion-card-content class="ion-text-center">
-            <ion-icon name="medkit-outline"></ion-icon>
-            <p>Catálogo</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+  <div class="content-section">
 
-      <ion-col size="6">
-        <ion-card (click)="navegar('/pedidos')" class="menu-card">
-          <ion-card-content class="ion-text-center">
-            <ion-icon name="cart-outline"></ion-icon>
-            <p>Mis Pedidos</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+    <p class="section-label">Accesos rápidos</p>
 
-      <ion-col size="6">
-        <ion-card (click)="navegar('/perfil')" class="menu-card">
-          <ion-card-content class="ion-text-center">
-            <ion-icon name="person-circle-outline"></ion-icon>
-            <p>Mi Perfil</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+    <div class="menu-grid">
+      <div class="menu-card" (click)="navegar('/catalogo')">
+        <div class="menu-card-icon teal">
+          <ion-icon name="medkit-outline"></ion-icon>
+        </div>
+        <span class="menu-card-label">Catálogo</span>
+      </div>
 
-      <ion-col size="6">
-        <ion-card (click)="navegar('/soporte')" class="menu-card">
-          <ion-card-content class="ion-text-center">
-            <ion-icon name="help-buoy-outline"></ion-icon>
-            <p>Soporte</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      <div class="menu-card" (click)="navegar('/carrito')">
+        <div class="menu-card-icon blue">
+          <ion-icon name="cart-outline"></ion-icon>
+        </div>
+        <span class="menu-card-label">Carrito</span>
+      </div>
 
-  <div *ngIf="esAdmin" class="admin-notice">
-    <ion-list-header>
-      <ion-label color="danger">Alertas de Inventario</ion-label>
-    </ion-list-header>
-    <ion-item lines="none" class="info-item">
-      <ion-icon name="warning-outline" slot="start" color="warning"></ion-icon>
-      <ion-label>Tienes productos bajo el stock mínimo</ion-label>
-      <ion-button fill="clear" (click)="navegar('/admin-productos')">Ver</ion-button>
-    </ion-item>
+      <div class="menu-card" (click)="navegar('/perfil')">
+        <div class="menu-card-icon purple">
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </div>
+        <span class="menu-card-label">Mi perfil</span>
+      </div>
+
+      <div class="menu-card" (click)="navegar('/soporte')">
+        <div class="menu-card-icon amber">
+          <ion-icon name="help-buoy-outline"></ion-icon>
+        </div>
+        <span class="menu-card-label">Soporte</span>
+      </div>
+    </div>
+
   </div>
+
+  <ion-alert
+    [isOpen]="mostrarAlertLogout"
+    header="Cerrar sesión"
+    message="¿Estás seguro que deseas desconectarte?"
+    [buttons]="alertButtons"
+    (didDismiss)="mostrarAlertLogout = false">
+  </ion-alert>
+
 </ion-content>

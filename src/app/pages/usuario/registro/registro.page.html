@@ -1,68 +1,121 @@
-<ion-header border-none>
+<ion-header class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/login"></ion-back-button>
     </ion-buttons>
-    <ion-title>Crear Cuenta Medistock</ion-title>
+    <ion-title>Crear cuenta</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="register-form">
-    <ion-list lines="full">
-      <ion-item>
-        <ion-label position="stacked">Nombre Completo</ion-label>
+<ion-content>
+  <div class="form-area">
+
+    <div class="section-divider">
+      <div class="line"></div>
+      <span>Datos personales</span>
+      <div class="line"></div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Nombre completo</span>
+      <div class="field-wrap">
+        <ion-icon name="person-outline"></ion-icon>
         <ion-input [(ngModel)]="nuevoUsuario.nombre" type="text" placeholder="Ej: Juan Pérez"></ion-input>
-      </ion-item>
+      </div>
+    </div>
 
-      <ion-item>
-        <ion-label position="stacked">Email</ion-label>
+    <div class="field">
+      <span class="field-label">Correo electrónico</span>
+      <div class="field-wrap">
+        <ion-icon name="mail-outline"></ion-icon>
         <ion-input [(ngModel)]="nuevoUsuario.email" type="email" placeholder="correo@ejemplo.com"></ion-input>
-      </ion-item>
+      </div>
+      <p *ngIf="nuevoUsuario.email && !esEmailValido(nuevoUsuario.email)" class="error-text">
+        Por favor, ingresa un correo electrónico válido.
+      </p>
+    </div>
 
-      <ion-item>
-        <ion-label position="stacked">Contraseña</ion-label>
-        <ion-input [(ngModel)]="nuevoUsuario.password" type="password"></ion-input>
-      </ion-item>
+    <div class="field">
+      <span class="field-label">Contraseña</span>
+      <div class="field-wrap">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-input [(ngModel)]="nuevoUsuario.password" type="password" placeholder="••••••••"></ion-input>
+      </div>
+      <p *ngIf="nuevoUsuario.password && nuevoUsuario.password.length < 6" class="error-text">
+        La contraseña debe tener al menos 6 caracteres.
+      </p>
+    </div>
 
-      <ion-item>
-        <ion-label position="stacked">Tipo de Usuario</ion-label>
-        <ion-select [(ngModel)]="nuevoUsuario.rol" placeholder="Seleccione su perfil">
+    <div class="field">
+      <span class="field-label">Tipo de usuario</span>
+      <div class="field-wrap">
+        <ion-icon name="id-card-outline"></ion-icon>
+        <ion-select [(ngModel)]="nuevoUsuario.rol" placeholder="Seleccione su perfil" interface="action-sheet">
           <ion-select-option value="PACIENTE">Paciente</ion-select-option>
           <ion-select-option value="INSTITUCION">Institución</ion-select-option>
         </ion-select>
-      </ion-item>
-
-      <ion-item *ngIf="nuevoUsuario.rol === 'INSTITUCION'">
-        <ion-label position="stacked">RUT de la Institución</ion-label>
-        <ion-input [(ngModel)]="nuevoUsuario.rut_institucion" type="text" placeholder="Ej: 76.123.456-K"></ion-input>
-      </ion-item>
-
-      <ion-item-divider color="light">
-        <ion-label>Dirección de Despacho</ion-label>
-      </ion-item-divider>
-
-      <ion-item>
-        <ion-label position="stacked">Calle y Número</ion-label>
-        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.calle" type="text"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="stacked">Comuna</ion-label>
-        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.comuna" type="text"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="stacked">Ciudad</ion-label>
-        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.ciudad" type="text"></ion-input>
-      </ion-item>
-    </ion-list>
-
-    <div class="ion-padding-top">
-      <ion-button expand="block" color="primary" (click)="onRegister()">
-        <ion-icon name="person-add-outline" slot="start"></ion-icon>
-        Registrarme
-      </ion-button>
+      </div>
     </div>
+
+    <div class="field">
+      <span class="field-label">{{ nuevoUsuario.rol === 'INSTITUCION' ? 'RUT institución' : 'RUT' }}</span>
+      <div class="field-wrap">
+        <ion-icon name="card-outline"></ion-icon>
+        <ion-input [(ngModel)]="nuevoUsuario.rut" 
+                   type="text" 
+                   [placeholder]="nuevoUsuario.rol === 'INSTITUCION' ? 'Ej: 76.123.456-K' : 'Ej: 12.345.678-9'"
+                   (ionInput)="formatearRut($event)"
+                   maxlength="12">
+        </ion-input>
+      </div>
+      <p *ngIf="nuevoUsuario.rut && !esRutValido(nuevoUsuario.rut)" class="error-text">
+        El RUT ingresado no es válido.
+      </p>
+    </div>
+
+    <div class="section-divider">
+      <div class="line"></div>
+      <span>Dirección de despacho</span>
+      <div class="line"></div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Calle y número</span>
+      <div class="field-wrap">
+        <ion-icon name="map-outline"></ion-icon>
+        <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.calle" type="text" placeholder="Ej: Av. Providencia 1234"></ion-input>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <span class="field-label">Comuna</span>
+        <div class="field-wrap">
+          <ion-icon name="business-outline"></ion-icon>
+          <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.comuna" type="text" placeholder="Comuna"></ion-input>
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Ciudad</span>
+        <div class="field-wrap">
+          <ion-icon name="location-outline"></ion-icon>
+          <ion-input [(ngModel)]="nuevoUsuario.direccion_despacho.ciudad" type="text" placeholder="Ciudad"></ion-input>
+        </div>
+      </div>
+    </div>
+
+    <ion-button expand="block" 
+                class="btn-register" 
+                (click)="onRegister()"
+                [disabled]="!formularioEstaListo()">
+      <ion-icon name="person-add-outline" slot="start"></ion-icon>
+      Registrarme
+    </ion-button>
+
+    <div class="login-row">
+      <span>¿Ya tienes cuenta?</span>
+      <a routerLink="/login">Inicia sesión</a>
+    </div>
+
   </div>
 </ion-content>
