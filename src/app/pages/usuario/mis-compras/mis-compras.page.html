@@ -1,0 +1,64 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <div *ngIf="loading" class="ion-text-center ion-padding" style="margin-top: 20%;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Consultando historial en Medistock...</p>
+  </div>
+
+  <div *ngIf="!loading && pedidos.length === 0" class="ion-text-center" style="margin-top: 30%;">
+    <ion-icon name="bag-handle-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
+    <h2>Aún no tienes compras</h2>
+    <p>Tus pedidos aprobados aparecerán aquí.</p>
+  </div>
+
+  <div *ngIf="!loading && pedidos.length > 0">
+    <ion-card *ngFor="let pedido of pedidos" style="margin-bottom: 16px; border-radius: 12px;">
+      
+      <ion-item lines="full">
+        <ion-label>
+          <h2 style="font-weight: bold; font-size: 14px;">ORDEN: #{{ pedido._id?.slice(-6) | uppercase }}</h2>
+          <p style="font-size: 12px; color: #888;">{{ pedido.fechaPedido | date:'dd/MM/yyyy HH:mm' }}</p>
+        </ion-label>
+        
+        <ion-badge slot="end" [color]="getBadgeColor(pedido.pago?.estado)">
+          {{ pedido.pago?.estado }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-card-content style="padding: 12px 16px;">
+        <div *ngFor="let art of pedido.articulos" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-weight: 600; color: #333; font-size: 14px;">{{ art.nombreP }}</span>
+            <small style="color: #666;">Precio: {{ art.precioUnitario | currency:'CLP':'symbol-narrow':'1.0-0' }}</small>
+          </div>
+          <span style="font-weight: bold; color: var(--ion-color-primary);">x{{ art.cantidad }}</span>
+        </div>
+
+        <hr style="border: 0; border-top: 0.5px solid rgba(0,0,0,0.08); margin: 12px 0;" />
+
+        <div *ngIf="pedido.envio" style="background: #f9f9f9; padding: 8px; border-radius: 6px; margin-bottom: 12px; font-size: 12px; color: #555;">
+          <div><strong>Despacho:</strong> {{ pedido.envio.tipo }} ({{ pedido.envio.estado_entrega }})</div>
+          <div *ngIf="pedido.envio.tracking_number"><strong>Tracking:</strong> {{ pedido.envio.tracking_number }}</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold;">
+          <span style="color: #666; font-size: 13px;">Total pagado:</span>
+          <span style="font-size: 16px; color: var(--ion-color-dark);">
+            {{ pedido.total | currency:'CLP':'symbol-narrow':'1.0-0' }}
+          </span>
+        </div>
+      </ion-card-content>
+
+    </ion-card>
+  </div>
+
+</ion-content>

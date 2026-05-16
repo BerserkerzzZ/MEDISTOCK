@@ -8,7 +8,7 @@ export interface Usuario {
     _id?: string; // MongoDB usa _id
     nombre: string;
     email: string;
-    rol: 'PACIENTE' | 'INSTITUCION' | 'ADMINISTRADOR' | 'EJECUTIVO' | 'LOGISTICO' | 'ANALISTA';
+    rol: 'PACIENTE' | 'INSTITUCION' | 'ADMINISTRADOR';
     rut_institucion?: string;
     direccion_despacho?: Direccion;
     fechaCreacion?: Date;

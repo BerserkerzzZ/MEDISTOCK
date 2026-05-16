@@ -33,6 +33,10 @@ const routes: Routes = [
     path: 'registro',
     loadChildren: () => import('./pages/usuario/registro/registro.module').then( m => m.RegistroPageModule)
   },
+  {
+    path: 'mis-compras',
+    loadChildren: () => import('./pages/usuario/mis-compras/mis-compras.module').then( m => m.MisComprasPageModule)
+  },
 ];
 
 @NgModule({
