@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Añadido por si manejas llamadas HTTP directas
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -35,7 +35,6 @@ export class CarritoPage implements OnInit {
 
   sumarUnidad(item: CartItem) {
     if (item.producto._id && item.producto.stocks) {
-      // Tu lógica de reducir el array de stocks con reduce es excelente para sumar múltiples bodegas
       const stockMaximo = item.producto.stocks.reduce((acc, b) => acc + b.actual, 0);
       
       const seIncremento = this.cartService.incrementarCantidad(item.producto._id, stockMaximo);
@@ -79,11 +78,10 @@ export class CarritoPage implements OnInit {
       return;
     }
 
-    // 🔄 REESTRUCTURACIÓN DEL PAYLOAD SINCROINZADO CON TU NUEVO PEDIDOCONTROLLER
     const datosPedido = {
-      total: this.total,            // 🔄 Cambiado de 'monto' a 'total' para calzar con el modelo
-      cliente: idUsuarioLogueado,   // 🔄 Cambiado de 'clienteId' a 'cliente'
-      envioTipo: 'NORMAL',          // 🔄 Cambiado de 'tipoEnvio' a 'envioTipo'
+      total: this.total,
+      cliente: idUsuarioLogueado,
+      envioTipo: 'NORMAL',
       articulos: this.items.map(item => ({
         producto: item.producto._id,
         nombreP: item.producto.nombreP,
