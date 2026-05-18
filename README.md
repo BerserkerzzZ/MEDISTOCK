@@ -4,23 +4,59 @@
 Como propósito principal esta API va a actuar como el nucleo de la integración y gestión automatizada de la distribuidora MEDISTOCK, donde se va a centralizar la lógica del negocio, permitiendo que diferentes plataformas interactúen con una única fuente de verdad en tiempo real
 
 ## Stack Tecnológico
-* Lenguaje: JavaScript
-* Framework: Express.js y Angular
-* Base de Datos: MongoDB
+
 * Herramientas de Construcción: NPM
 * Librerías: Mongoose, Bcryptjs, Dotenv, CORS
+Backend
+* Runtime: Node.js 
+* Framework: Express.js
+* Base de Datos: MongoDB Atlas
+* Pasarela de Pago: Transbank SDK
+* Librerías Críticas: Mongoose
+
+Frontend
+* Framework: Angular
+* Plataforma Híbrida: Ionic Framework
+* Despliegue: Vercel
+* Túnel de Desarrollo: ngrok
 
 ## Estructura de Carpetas
-En la carpeta de server es donde se hace la conexión con la base de datos y donde se encuentran las carpetas del controller y los models mientras que en src es donde van a estar las vistas
-* `controller/`: Se encarga de recibir las peticiones HTTP, procesar los datos y enviar las respuestas al cliente.
-* `config/`: Es el centro de configuración y conexión del servidor.
-* `model/`: Contiene la definición de los esquemas de datos utilizando Mongoose.
+Backend
+* config: conexión a la base de datos
+* controllers: lógica de negocio, aquí están las funciones divididas en usuarios, productos, pedido, auth y webpay.
+* helpers: validación de JWT
+* models: esquemas de Mongoose Usuario Pedido y Producto
+* routes: definición de endpoints, conecta las URLs con los controllers
+* index.js: punto de entrada, levanta Express, conecta middlewares y registra las rutas
+* variable.env: variables de entorno como MONGO_URI,
+Frontend
+* guards: AuthGuard que verifica si hay token antes de dejar entrar a páginas privadas
+* home: página principal con su HTML, SCSS, TS 
+* models: interfaces TypeScript que definen la forma de los datos que vienen del backend
+* pages: aquí viven las páginas secundarias organizadas por dominio:
+   * producto: catálogo, admin-productos y carrito.
+   * usuario: login, registro, mis-compras.
+* services: servicios de Angular que hacen las llamadas HTTP al backend
+* environments: environment.ts con la URL del backend para dev y prod
 
 ## Configuración e Instalación
-1. Clonar el repositorio.
-2. Configurar el archivo de propiedades (database, puerto).
-3. npm install
-   npm run dev
+
+Backend
+
+* clonar e instalar dependencias
+   * cd server
+   * npm install
+* ejecutar desarrollo
+   * npm run dev
+   * ngrok http 3000
+
+Frontend
+
+* instalar dependencias
+   * cd server
+   * npm install
+* ejecutar desarrollo
+   * ionic serve
 
 ## Documentación de Arquitectura (Modelo 4+1)
 Acceso a los diagramas de despliegue, comunicación y paquetes:
